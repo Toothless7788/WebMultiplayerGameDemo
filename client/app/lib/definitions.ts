@@ -1,3 +1,6 @@
+/*
+Should be put in the backend but since we are using JavaScript, this script becomes useless
+*/
 enum Direction {
     UP, 
     DOWN, 

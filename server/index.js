@@ -9,7 +9,8 @@ const cors = require("cors");
 
 app.use(cors());    // Control the access of the different device
 
-const INTERVAL = 1000;    // THe time interval in milliseconds for the server to send a data to clients
+const INTERVAL = 5000;    // THe time interval in milliseconds for the server to send a data to clients
+const SPEED = 5;    // Speed of players
 let count = 1;
 let grid = {
   id: 1
@@ -38,22 +39,35 @@ io.on("connection", (socket) => {
     socket.emit("set_player_id", {playerID: socket.id});
   });
 
-  setInterval(() => {
-    // count++;
-    // console.log(`grid = ${Object.keys(grid).length}`);
-    // Update grid
-
-    io.emit("update_coordinates", grid);
-  }, INTERVAL);
-
-  // run();
+  run();
 });
 
 const updateGrid = () => {
+  // console.log(`updateGrid()`);
   // Update grid
-  grid.array.forEach(element => {
-    console.log(`element in grid = ${element}`);
-  });
+  Object.entries(grid).forEach(
+    ([key, value]) => {
+      console.log(`key, value = ${key}, ${value}`);
+      console.log("=====");
+      // Update coordinates
+      switch(value.direction) {
+        case "UP":
+          y = y + SPEED;
+          break;
+        case "DOWN":
+          y = y - SPEED;
+          break;
+        case "LEFT":
+          x = x - SPEED;
+          break;
+        case "RIGHT":
+          x = x + SPEED;
+          break;
+        default:
+          break;
+      }
+    }
+  );
 };
 
 const run = () => {
@@ -61,6 +75,7 @@ const run = () => {
     // count++;
     // console.log(`grid = ${Object.keys(grid).length}`);
     // Update grid
+    updateGrid();
 
     io.emit("update_coordinates", grid);
   }, INTERVAL);

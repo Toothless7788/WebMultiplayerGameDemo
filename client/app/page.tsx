@@ -44,7 +44,12 @@ export default function App() {
 
   socket.on("update_coordinates", (data) => {
     // The grid
-    console.log(`data in client = ${data}`);
+    Object.entries(data).forEach(
+      ([key, value]) => {
+        console.log(`client h${playerID}h: (key, value) = (${value.x}, ${value.y})`)
+        console.log(`\n`);
+      }
+    );
   });
 
   socket.on("set_player_id", (data) => {

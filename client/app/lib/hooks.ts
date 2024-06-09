@@ -23,7 +23,12 @@ import React, { useEffect } from "react";
 //     }, [callback, targetKey]);
 // };
 
-export const useKeyPress = (handler: EventListenerOrEventListenerObject, dependencies = []) => {
+/**
+ * A hook for pressing a key
+ * @param handler Should be EventListenerOrEventListenerObject
+ * @param dependencies 
+ */
+export const useKeyPress = (handler: any, dependencies = []) => {
     useEffect(() => {
         document.addEventListener("keydown", handler);
         // clean up

@@ -2,13 +2,18 @@
 import { useState } from "react";
 import Obstacle from "./components/obstacle";
 import Player from "./components/sprite/player";
-import { useKeyDown, useKeyPress } from "./lib/hooks";
+import { useKeyPress } from "./lib/hooks";
+import { Direction, PlayerType } from "./lib/definitions";
+
 
 export default function App() {
-
   const [pressedKey, setKey] = useState("Initial key");
+  const [player, setPlayer] = useState<PlayerType>({x: 0, y: 0, width: 30, height: 20, color: "#00416d", direction: Direction.NONE});
   const pressKey = (keyCode: string) => {
     setKey(keyCode);
+
+    // Send data to server
+
   };
 
   // Demo
@@ -21,8 +26,8 @@ export default function App() {
     <div>
       <h1>Hello World123</h1>
       <p>Key pressed: {pressedKey}</p>
-      <Player x={25} y={25} width={50} height={50} color="#00416d" />
-      <Obstacle x={15} y={25} width={50} height={50} color="green" />
+      <Player x={player.x} y={player.y} width={player.width} height={player.height} color={player.color} />
+      <Obstacle x={105} y={25} width={50} height={50} color="green" />
     </div>
   );
 }

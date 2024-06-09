@@ -8,6 +8,8 @@ Note:
 
 #client
 npm install socket.io-client
+npm install ws bufferutil utf-8-validate
 
 #server
 npm install express cors nodemon socket.io
+npm install ws bufferutil utf-8-validate

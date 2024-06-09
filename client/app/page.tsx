@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Obstacle from "./components/obstacle";
 import Player from "./components/sprite/player";
 import { useKeyPress } from "./lib/hooks";
@@ -12,7 +12,7 @@ const socket = io("http://localhost:3001");
 export default function App() {
   const [pressedKey, setKey] = useState("Initial key");
   const [players, setPlayers] = useState<PlayerType[]>([{x: 0, y: 0, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
-  const [playerID, setPlayerID] = useState(-1);
+  const [playerID, setPlayerID] = useState("");
 
   const pressKey = (keyCode: string) => {
     setKey(keyCode);
@@ -37,12 +37,18 @@ export default function App() {
     }
   };
 
+  const createPlayer = () => {
+    console.log(`createPlayer()`);
+    socket.emit("create_player", {x: 0, y: 0, width: 50, height: 50, color: "red", direction: "NONE", id: -1});
+  };
+
   socket.on("update_coordinates", (data) => {
+    // The grid
     console.log(`data in client = ${data}`);
   });
 
-  socket.on("set_up", (data) => {
-    console.log(`playerID = ${playerID}`);
+  socket.on("set_player_id", (data) => {
+    console.log(`playerID = ${data.playerID}`);
     setPlayerID(data.playerID);
   })
 
@@ -50,12 +56,19 @@ export default function App() {
   // useKeyPress((e: KeyboardEvent) => {console.log(`event e = ${e.code}`);setKey(e.code)}, []);    // Ignore the red line. VS code is tripping
   useKeyPress((e: KeyboardEvent) => {pressKey(e.code)}, []);    // Ignore the red line. VS code is tripping
 
+  // Register this user
+  useEffect(() => {
+    console.log(`createPlayer()`);
+    createPlayer();
+  }, []);
+
 
   return (
     // tabIndex defins the order in which the elements are focused when using keyboard navigation
     <div>
       <h1>Hello World123</h1>
       <p>Key pressed: {pressedKey}</p>
+      <p>Player ID: {playerID}</p>
       <Player x={players[0].x} y={players[0].y} width={players[0].width} height={players[0].height} color={players[0].color} />
       <Obstacle x={105} y={25} width={50} height={50} color="green" />
     </div>

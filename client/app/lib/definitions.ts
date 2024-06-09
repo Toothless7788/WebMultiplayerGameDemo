@@ -2,11 +2,11 @@
 Should be put in the backend but since we are using JavaScript, this script becomes useless
 */
 export enum Direction {
-    UP, 
-    DOWN, 
-    LEFT, 
-    RIGHT, 
-    NONE
+    UP = 1, 
+    DOWN = 2, 
+    LEFT = 3, 
+    RIGHT = 4, 
+    NONE = 0
 }
 
 export type PlayerType = {
@@ -15,7 +15,8 @@ export type PlayerType = {
     width: number, 
     height: number, 
     color: string, 
-    direction: Direction
+    direction: Direction, 
+    id: number
 }
 
 export type Obstacle = {

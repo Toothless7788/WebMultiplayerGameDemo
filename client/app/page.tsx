@@ -11,12 +11,30 @@ const socket = io("http://localhost:3001");
 
 export default function App() {
   const [pressedKey, setKey] = useState("Initial key");
-  const [player, setPlayer] = useState<PlayerType>({x: 0, y: 0, width: 30, height: 20, color: "#00416d", direction: Direction.NONE});
+  const [players, setPlayers] = useState<PlayerType[]>([{x: 0, y: 0, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
+  const [playerID, setPlayerID] = useState(-1);
+
   const pressKey = (keyCode: string) => {
     setKey(keyCode);
 
     // Send data to server
-
+    switch(keyCode) {
+      case "ArrowUp":
+        socket.emit("player_movement", {id: playerID, direction: "UP"});
+        break;
+      case "ArrowDown":
+        socket.emit("player_movement", {id: playerID, direction: "DOWN"});
+        break;
+      case "ArrowLeft":
+        socket.emit("player_movement", {id: playerID, direction: "LEFT"});
+        break;
+      case "ArrowRight":
+        socket.emit("player_movement", {id: playerID, direction: "RIGHT"});
+        break;
+      default:
+        console.log(`Undefined keyCode = ${keyCode}`);
+        break;
+    }
   };
 
   // Demo
@@ -29,7 +47,7 @@ export default function App() {
     <div>
       <h1>Hello World123</h1>
       <p>Key pressed: {pressedKey}</p>
-      <Player x={player.x} y={player.y} width={player.width} height={player.height} color={player.color} />
+      <Player x={players[0].x} y={players[0].y} width={players[0].width} height={players[0].height} color={players[0].color} />
       <Obstacle x={105} y={25} width={50} height={50} color="green" />
     </div>
   );

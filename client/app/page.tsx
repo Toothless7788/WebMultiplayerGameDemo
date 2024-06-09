@@ -4,6 +4,9 @@ import Obstacle from "./components/obstacle";
 import Player from "./components/sprite/player";
 import { useKeyPress } from "./lib/hooks";
 import { Direction, PlayerType } from "./lib/definitions";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:3001");
 
 
 export default function App() {

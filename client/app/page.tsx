@@ -1,35 +1,52 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Obstacle from "./components/obstacle";
 import Player from "./components/sprite/player";
 import { useKeyPress } from "./lib/hooks";
 import { Direction, PlayerType } from "./lib/definitions";
 import { io } from "socket.io-client";
+import { log, logMap } from "./lib/utils";
 
-const socket = io("http://localhost:3001");
+const socketURL = "http://localhost:3001";
+// const socket = io("http://localhost:3001");    // Original, which does not allow re-rendering of picture
+const socket = io("http://localhost");
+
+let playerNum: string | number;
 
 
 export default function App() {
   const [pressedKey, setKey] = useState("Initial key");
-  const [players, setPlayers] = useState<PlayerType[]>([{x: 0, y: 0, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
-  const [playerID, setPlayerID] = useState("");
+  const [players, setPlayers] = useState<PlayerType[]>([{x: 100, y: 100, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
+  // const [players, setPlayers] = useState<PlayerType[]>(new Map());
+  const [playerID, setPlayerID] = useState("");    //TODO To be removed when we no longer need to display playerID
+
+  // let socket = useRef(null);
+
+  // Create socket
+  // useEffect(() => {
+  //   socket.current = io(socketURL, {
+  //     autoConnect: false
+  //   });
+  // }, [socketURL]);
 
   const pressKey = (keyCode: string) => {
     setKey(keyCode);
 
+    log("Sending playerID", playerNum);
+
     // Send data to server
     switch(keyCode) {
       case "ArrowUp":
-        socket.emit("player_movement", {id: playerID, direction: "UP"});
+        socket.emit("player_movement", {id: playerNum, direction: "UP"});
         break;
       case "ArrowDown":
-        socket.emit("player_movement", {id: playerID, direction: "DOWN"});
+        socket.emit("player_movement", {id: playerNum, direction: "DOWN"});
         break;
       case "ArrowLeft":
-        socket.emit("player_movement", {id: playerID, direction: "LEFT"});
+        socket.emit("player_movement", {id: playerNum, direction: "LEFT"});
         break;
       case "ArrowRight":
-        socket.emit("player_movement", {id: playerID, direction: "RIGHT"});
+        socket.emit("player_movement", {id: playerNum, direction: "RIGHT"});
         break;
       default:
         console.log(`Undefined keyCode = ${keyCode}`);
@@ -39,22 +56,25 @@ export default function App() {
 
   const createPlayer = () => {
     console.log(`createPlayer()`);
-    socket.emit("create_player", {x: 0, y: 0, width: 50, height: 50, color: "red", direction: "NONE", id: -1});
+    socket.emit("create_player", {x: 100, y: 100, width: 50, height: 50, color: "red", direction: "NONE", id: -1});
   };
 
   socket.on("update_coordinates", (data) => {
+    logMap(data);
     // The grid
     Object.entries(data).forEach(
       ([key, value]) => {
-        console.log(`client h${playerID}h: (key, value) = (${value.x}, ${value.y})`)
-        console.log(`\n`);
+        // console.log(`client with key ${key} h${playerID}h: (key, value) = (${value["x"]}, ${value["y"]})`)
+        // console.log(`\n`);
       }
     );
   });
 
   socket.on("set_player_id", (data) => {
-    console.log(`playerID = ${data.playerID}`);
-    setPlayerID(data.playerID);
+    if(data.playerID != null && data.playerID != "") {
+      setPlayerID(data.playerID);
+      playerNum = data.playerID;
+    }
   })
 
   // Demo
@@ -62,11 +82,9 @@ export default function App() {
   useKeyPress((e: KeyboardEvent) => {pressKey(e.code)}, []);    // Ignore the red line. VS code is tripping
 
   // Register this user
-  useEffect(() => {
-    console.log(`createPlayer()`);
+  useEffect(() => {    // useEffect() is invoked twice because we are using strict mode in REACT, which renders elements twice
     createPlayer();
   }, []);
-
 
   return (
     // tabIndex defins the order in which the elements are focused when using keyboard navigation
@@ -75,7 +93,7 @@ export default function App() {
       <p>Key pressed: {pressedKey}</p>
       <p>Player ID: {playerID}</p>
       <Player x={players[0].x} y={players[0].y} width={players[0].width} height={players[0].height} color={players[0].color} />
-      <Obstacle x={105} y={25} width={50} height={50} color="green" />
+      <Obstacle x={105} y={125} width={50} height={50} color="green" />
     </div>
   );
 }

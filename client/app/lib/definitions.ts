@@ -26,3 +26,7 @@ export type Obstacle = {
     height: number,    
     color: string
 }
+
+// export class Grid {
+//     [key: string | number]: PlayerType;
+// }

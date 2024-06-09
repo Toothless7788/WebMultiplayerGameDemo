@@ -58,7 +58,7 @@ io.on("connection", (socket) => {
 
   log("run()");
 
-  run();
+  run(socket);
 });
 
 const updateGrid = () => {
@@ -90,17 +90,19 @@ const updateGrid = () => {
   );
 };
 
-const run = () => {
+const run = (socket) => {
   log("setInterval()");
   setInterval(() => {
-    // count++;
+    count++;
     // console.log(`grid = ${Object.keys(grid).length}`);
     // Update grid
     updateGrid();
 
     log("grid in server", Object.keys(grid));
     logMap(grid);
-    io.emit("update_coordinates", grid);
+    // socket.emit("update_coordinates", count);
+    console.log(`grid in JSON: ${JSON.stringify(Object.fromEntries(grid))}`);
+    socket.emit("update_coordinates", JSON.stringify(Object.fromEntries(grid)));    // Note that emit can only transmit integer, string etc. but not map, object, function etc. 
   }, INTERVAL);
 };
 

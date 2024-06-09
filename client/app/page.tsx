@@ -9,7 +9,7 @@ import { log, logMap } from "./lib/utils";
 
 const socketURL = "http://localhost:3001";
 // const socket = io("http://localhost:3001");    // Original, which does not allow re-rendering of picture
-const socket = io("http://localhost");
+const socket = io(socketURL);
 
 let playerNum: string | number;
 
@@ -60,7 +60,8 @@ export default function App() {
   };
 
   socket.on("update_coordinates", (data) => {
-    logMap(data);
+    // logMap(data);
+    console.log(JSON.parse(data));
     // The grid
     Object.entries(data).forEach(
       ([key, value]) => {

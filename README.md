@@ -10,4 +10,4 @@ Note:
 npm install socket.io-client
 
 #server
-
+npm install express cors nodemon socket.io

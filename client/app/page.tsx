@@ -37,6 +37,15 @@ export default function App() {
     }
   };
 
+  socket.on("update_coordinates", (data) => {
+    console.log(`data in client = ${data}`);
+  });
+
+  socket.on("set_up", (data) => {
+    console.log(`playerID = ${playerID}`);
+    setPlayerID(data.playerID);
+  })
+
   // Demo
   // useKeyPress((e: KeyboardEvent) => {console.log(`event e = ${e.code}`);setKey(e.code)}, []);    // Ignore the red line. VS code is tripping
   useKeyPress((e: KeyboardEvent) => {pressKey(e.code)}, []);    // Ignore the red line. VS code is tripping

@@ -58,7 +58,7 @@ export default function App() {
   };
 
   const createPlayer = () => {
-    console.log(`createPlayer()`);
+    // console.log(`createPlayer()`);
     socket.emit("create_player", {x: 100, y: 100, width: 50, height: 50, color: "red", direction: "NONE", id: -1});
   };
 
@@ -70,7 +70,7 @@ export default function App() {
     // console.log(`entries of JSON.parse(data) = ${entries}\n`);
 
     grid = createList(entries);
-    console.log(`Updated grid = ${grid}`);
+    // console.log(`Updated grid = ${grid}`);
   });
 
   socket.on("set_player_id", (data) => {

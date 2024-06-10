@@ -22,16 +22,6 @@ export default function App() {
   // const [players, setPlayers] = useState<PlayerType[]>(new Map());
   const [playerID, setPlayerID] = useState("");    //TODO To be removed when we no longer need to display playerID
   const [grid, setGrid] = useState<PlayerType[]>([]);
-  // const [grid, setGrid] = useState(new Map());
-
-  // let socket = useRef(null);
-
-  // Create socket
-  // useEffect(() => {
-  //   socket.current = io(socketURL, {
-  //     autoConnect: false
-  //   });
-  // }, [socketURL]);
 
   const pressKey = (keyCode: string) => {
     setKey(keyCode);
@@ -57,43 +47,6 @@ export default function App() {
         break;
     }
   };
-
-  // const releaseKey = (keyCode: string) => {
-  //   log("old pressedKey", pressedKey);
-
-  //   // Send data to server
-  //   switch(keyCode) {
-  //     case "ArrowUp":
-  //       if(pressedKey === "ArrowUp") {
-  //         setKey("NONE");
-  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
-  //         break;
-  //       }
-  //     case "ArrowDown":
-  //       if(pressedKey === "ArrowDown") {
-  //         setKey("NONE");
-  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
-  //         break;
-  //       }
-  //     case "ArrowLeft":
-  //       if(pressedKey === "ArrowLeft") {
-  //         setKey("NONE");
-  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
-  //         break;
-  //       }
-  //     case "ArrowRight":
-  //       if(pressedKey === "ArrowRight") {
-  //         setKey("NONE");
-  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
-  //         break;
-  //       }
-  //     default:
-  //       console.log(`Undefined keyCode = ${keyCode}`);
-  //       break;
-  //   }
-
-  //   log("new pressedKey", pressedKey);
-  // };
 
   const createPlayer = () => {
     // console.log(`createPlayer()`);
@@ -128,11 +81,6 @@ export default function App() {
   useEffect(() => {    // useEffect() is invoked twice because we are using strict mode in REACT, which renders elements twice
     createPlayer();
   }, []);
-
-  // useEffect(() => {    // For checking
-  //   log("useEffect().grid.length", grid.length);
-  // }, [grid]);
-
 
   return (
     // tabIndex defins the order in which the elements are focused when using keyboard navigation

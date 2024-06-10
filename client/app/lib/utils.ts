@@ -1,3 +1,5 @@
+import { PlayerType } from "./definitions";
+
 export function log(name: string, value: any) {
   console.log(`${name}: ${value}`);
 }
@@ -22,19 +24,20 @@ export function logMap(name: string, m: Map<string, Object>) {
  * @returns a list of block instance
  */
 export function createList(o: Object) {
-  let jsonList: Object[] = [];
+  let jsonList: PlayerType[] = [];
   let entries = Object.entries(o);
 
   // console.log(`createMap() entries = ${entries}`);
 
   entries.forEach((key, dummyValue) => {
     // console.log(`\nkey = ${key[1][0]}`);
-    // console.log(`value = ${key[1][1]}`);
+    console.log(`value = ${JSON.stringify(key[1][1])}`);
+    console.log(`type = ${typeof key[1][1]}`);
     // console.log(`dummy value = ${dummyValue}`);
-    jsonList.push(key[1][1]);
+    jsonList.push(key[1][1] as PlayerType);
   });
 
-  console.log(`jsonList = ${jsonList} with length ${jsonList.length}`);
+  // console.log(`jsonList = ${jsonList} with length ${jsonList.length}`);
   return jsonList;
   
 }

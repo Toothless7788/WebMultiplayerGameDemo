@@ -21,7 +21,7 @@ export default function App() {
   const [players, setPlayers] = useState<PlayerType[]>([{x: 100, y: 100, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
   // const [players, setPlayers] = useState<PlayerType[]>(new Map());
   const [playerID, setPlayerID] = useState("");    //TODO To be removed when we no longer need to display playerID
-  const [grid, setGrid] = useState<Object[]>([]);
+  const [grid, setGrid] = useState<PlayerType[]>([]);
   // const [grid, setGrid] = useState(new Map());
 
   // let socket = useRef(null);
@@ -71,7 +71,8 @@ export default function App() {
     // console.log(`entries of JSON.parse(data) = ${entries}\n`);
 
     setGrid(createList(entries));
-    console.log(`Updated grid = ${grid}`);
+    // console.log(`Updated grid = ${grid}`);
+    // console.log(`createList() grid = ${createList(entries)}`);
   });
 
   socket.on("set_player_id", (data) => {
@@ -90,7 +91,10 @@ export default function App() {
     createPlayer();
   }, []);
 
-  log("grid.length", grid.length);
+  useEffect(() => {    // For checking
+    log("useEffect().grid.length", grid.length);
+  }, [grid]);
+
 
   return (
     // tabIndex defins the order in which the elements are focused when using keyboard navigation
@@ -98,11 +102,12 @@ export default function App() {
       <h1>Hello World123</h1>
       <p>Key pressed: {pressedKey}</p>
       <p>Player ID: {playerID}</p>
-      {grid.map((key, value) => {
+      {grid.map((instance, value) => {
+        console.log(`instance in rendering = ${instance as PlayerType}`);
         return (
           <div>
-            <p>key = {key.toString()}</p>
-            <p>value = {value}</p>
+            <p>{JSON.stringify(instance)}</p>
+            <Player x={instance["x"]} y={instance["y"]} width={instance["width"]} height={instance["height"]} color={instance["color"]}/>
           </div>
         );
       })}

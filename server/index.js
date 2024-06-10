@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("create_player", (newPlayer) => {
-    grid.set(socket.id, {x: newPlayer.x, y: newPlayer.y, width: newPlayer.width, height: newPlayer.height, direction: newPlayer.direction});
+    grid.set(socket.id, {x: newPlayer.x, y: newPlayer.y, width: newPlayer.width, height: newPlayer.height, direction: newPlayer.direction, color: newPlayer.color});
     console.log(`newPlayer.(x, y) = (${newPlayer.x}, ${newPlayer.y})`);
     logMap(grid);
 

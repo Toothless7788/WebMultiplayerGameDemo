@@ -10,8 +10,9 @@ const cors = require("cors");
 app.use(cors());    // Control the access of the different device
 
 function logMap(m) {
-  console.log(Array.from(m.keys()));
-  console.log(Array.from(m.values()));
+  // console.log(Array.from(m.keys()));
+  // console.log(Array.from(m.values()));
+  console.log(JSON.stringify(m));
 }
 
 function log(name, value) {
@@ -36,10 +37,12 @@ io.on("connection", (socket) => {
   console.log(`User connection: ${socket.id}`);
 
   socket.on("player_movement", (data) => {
+    log("player_movement instance", grid.get(data.id));
     // log("data.id", data.id);
     // log("data.direction", data.direction);
     try {
       grid.get(data.id).direction = data.direction;
+      console.log(`New direction`, grid.get(data.id).direction);
     } catch(err) {
       console.err(`fail to set the direction of player: ${socket.id}; err: ${err}; grid: ${grid}`);
     }
@@ -49,8 +52,8 @@ io.on("connection", (socket) => {
 
   socket.on("create_player", (newPlayer) => {
     grid.set(socket.id, {x: newPlayer.x, y: newPlayer.y, width: newPlayer.width, height: newPlayer.height, direction: newPlayer.direction, color: newPlayer.color});
-    console.log(`newPlayer.(x, y) = (${newPlayer.x}, ${newPlayer.y})`);
-    logMap(grid);
+    // console.log(`newPlayer.(x, y) = (${newPlayer.x}, ${newPlayer.y})`);
+    // logMap(grid);
 
     socket.emit("set_player_id", {playerID: socket.id});
   });
@@ -61,26 +64,27 @@ io.on("connection", (socket) => {
 });
 
 const updateGrid = () => {
-  console.log(`updateGrid()`);
+  console.log(`\nupdateGrid()`);
+  console.log(`grid = ${JSON.stringify(Object.fromEntries(grid))}`);
   // Update grid
-  Object.entries(grid).forEach(
-    ([key, value]) => {
-      console.log(`key, value = ${key}, ${value}`);
-      console.log(`direction = ${value.direction}`)
+  Object.entries(Object.fromEntries(grid)).forEach(
+    ([key, instance]) => {
+      console.log(`key, instance = ${key}, ${JSON.stringify(instance)}`);
+      console.log(`direction = ${instance.direction}`)
       console.log("=====");
       // Update coordinates
-      switch(value.direction) {
+      switch(instance.direction) {
         case "UP":
-          y = y + SPEED;
+          instance.y = instance.y + SPEED;
           break;
         case "DOWN":
-          y = y - SPEED;
+          instance.y = instance.y - SPEED;
           break;
         case "LEFT":
-          x = x - SPEED;
+          instance.x = instance.x - SPEED;
           break;
         case "RIGHT":
-          x = x + SPEED;
+          instance.x = instance.x + SPEED;
           break;
         default:
           break;
@@ -90,17 +94,17 @@ const updateGrid = () => {
 };
 
 const run = (socket) => {
-  log("setInterval()");
+  // log("setInterval()");
   setInterval(() => {
     count++;
     // console.log(`grid = ${Object.keys(grid).length}`);
     // Update grid
     updateGrid();
 
-    log("grid in server", Object.keys(grid));
-    logMap(grid);
+    // log("grid in server", Object.keys(grid));
+    // logMap(grid);
     // socket.emit("update_coordinates", count);
-    console.log(`grid in JSON: ${JSON.stringify(Object.fromEntries(grid))}`);
+    console.log(`run().grid in JSON: ${JSON.stringify(Object.fromEntries(grid))}`);
     socket.emit("update_coordinates", JSON.stringify(Object.fromEntries(grid)));    // Note that emit can only transmit integer, string etc. but not map, object, function etc. 
   }, INTERVAL);
 };

@@ -19,6 +19,7 @@ export default function App() {
   const [players, setPlayers] = useState<PlayerType[]>([{x: 100, y: 100, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
   // const [players, setPlayers] = useState<PlayerType[]>(new Map());
   const [playerID, setPlayerID] = useState("");    //TODO To be removed when we no longer need to display playerID
+  const [grid, setGrid] = useState(new Map());
 
   // let socket = useRef(null);
 
@@ -61,7 +62,11 @@ export default function App() {
 
   socket.on("update_coordinates", (data) => {
     // logMap(data);
-    console.log(JSON.parse(data));
+    // console.log(new Map(Object.entries(JSON.parse(data))));
+    // console.log(`typeof grid = ${typeof new Map(Object.entries(JSON.parse(data)))}`)
+    setGrid(new Map(Object.entries(JSON.parse(data))));
+    logMap(grid);
+
     // The grid
     Object.entries(data).forEach(
       ([key, value]) => {

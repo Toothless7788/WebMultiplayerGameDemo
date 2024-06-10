@@ -15,3 +15,12 @@ export function logMap(m: Map<string, Object>) {
     console.log(`Type of m: ${typeof m}`);
   }
 }
+
+export function createMap(o: JSON) {
+  let jsonMap = new Map<string, string | Object>();
+
+  for(const key in o) {
+    console.log(`key = ${key}; value = ${o}`);
+    jsonMap.set(key, o[key]);
+  }
+}

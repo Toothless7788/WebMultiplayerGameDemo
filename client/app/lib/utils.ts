@@ -34,6 +34,7 @@ export function createList(o: Object) {
     jsonList.push(key[1][1]);
   });
 
+  console.log(`jsonList = ${jsonList} with length ${jsonList.length}`);
   return jsonList;
   
 }

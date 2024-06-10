@@ -13,7 +13,7 @@ const socket = io(socketURL);
 
 let playerNum: string | number;
 
-let grid = [];    // The grid in the structure [{block detail1}, {block detail2}, ...]
+// let grid: Object[] = [];    // The grid in the structure [{block detail1}, {block detail2}, ...]
 
 
 export default function App() {
@@ -21,6 +21,7 @@ export default function App() {
   const [players, setPlayers] = useState<PlayerType[]>([{x: 100, y: 100, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
   // const [players, setPlayers] = useState<PlayerType[]>(new Map());
   const [playerID, setPlayerID] = useState("");    //TODO To be removed when we no longer need to display playerID
+  const [grid, setGrid] = useState<Object[]>([]);
   // const [grid, setGrid] = useState(new Map());
 
   // let socket = useRef(null);
@@ -69,8 +70,8 @@ export default function App() {
     let entries = Object.entries(JSON.parse(data));    // entries is an array with structure [id, object]
     // console.log(`entries of JSON.parse(data) = ${entries}\n`);
 
-    grid = createList(entries);
-    // console.log(`Updated grid = ${grid}`);
+    setGrid(createList(entries));
+    console.log(`Updated grid = ${grid}`);
   });
 
   socket.on("set_player_id", (data) => {
@@ -89,14 +90,24 @@ export default function App() {
     createPlayer();
   }, []);
 
+  log("grid.length", grid.length);
+
   return (
     // tabIndex defins the order in which the elements are focused when using keyboard navigation
     <div>
       <h1>Hello World123</h1>
       <p>Key pressed: {pressedKey}</p>
       <p>Player ID: {playerID}</p>
-      <Player x={players[0].x} y={players[0].y} width={players[0].width} height={players[0].height} color={players[0].color} />
-      <Obstacle x={105} y={125} width={50} height={50} color="green" />
+      {grid.map((key, value) => {
+        return (
+          <div>
+            <p>key = {key.toString()}</p>
+            <p>value = {value}</p>
+          </div>
+        );
+      })}
+      {/* <Player x={players[0].x} y={players[0].y} width={players[0].width} height={players[0].height} color={players[0].color} /> */}
+      {/* <Obstacle x={105} y={125} width={50} height={50} color="green" /> */}
     </div>
   );
 }

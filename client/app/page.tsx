@@ -5,7 +5,7 @@ import Player from "./components/sprite/player";
 import { useKeyPress } from "./lib/hooks";
 import { Direction, PlayerType } from "./lib/definitions";
 import { io } from "socket.io-client";
-import { log, logMap } from "./lib/utils";
+import { createList, log, logMap } from "./lib/utils";
 
 const socketURL = "http://localhost:3001";
 // const socket = io("http://localhost:3001");    // Original, which does not allow re-rendering of picture
@@ -13,13 +13,15 @@ const socket = io(socketURL);
 
 let playerNum: string | number;
 
+let grid = [];    // The grid in the structure [{block detail1}, {block detail2}, ...]
+
 
 export default function App() {
   const [pressedKey, setKey] = useState("Initial key");
   const [players, setPlayers] = useState<PlayerType[]>([{x: 100, y: 100, width: 30, height: 20, color: "#00416d", direction: Direction.NONE, id: -1}]);
   // const [players, setPlayers] = useState<PlayerType[]>(new Map());
   const [playerID, setPlayerID] = useState("");    //TODO To be removed when we no longer need to display playerID
-  const [grid, setGrid] = useState(new Map());
+  // const [grid, setGrid] = useState(new Map());
 
   // let socket = useRef(null);
 
@@ -63,17 +65,12 @@ export default function App() {
   socket.on("update_coordinates", (data) => {
     // logMap(data);
     // console.log(new Map(Object.entries(JSON.parse(data))));
-    // console.log(`typeof grid = ${typeof new Map(Object.entries(JSON.parse(data)))}`)
-    setGrid(new Map(Object.entries(JSON.parse(data))));
-    logMap(grid);
+    // console.log(`JSON.parse(data) = ${JSON.parse(data)}`);
+    let entries = Object.entries(JSON.parse(data));    // entries is an array with structure [id, object]
+    // console.log(`entries of JSON.parse(data) = ${entries}\n`);
 
-    // The grid
-    Object.entries(data).forEach(
-      ([key, value]) => {
-        // console.log(`client with key ${key} h${playerID}h: (key, value) = (${value["x"]}, ${value["y"]})`)
-        // console.log(`\n`);
-      }
-    );
+    grid = createList(entries);
+    console.log(`Updated grid = ${grid}`);
   });
 
   socket.on("set_player_id", (data) => {

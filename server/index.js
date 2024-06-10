@@ -22,7 +22,6 @@ const INTERVAL = 1000;    // THe time interval in milliseconds for the server to
 const SPEED = 5;    // Speed of players
 let count = 1;
 let grid = new Map();
-grid.set("gridid", 1);
 
 const server = http.createServer(app);
 

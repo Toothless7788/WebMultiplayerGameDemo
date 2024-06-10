@@ -31,8 +31,8 @@ export function createList(o: Object) {
 
   entries.forEach((key, dummyValue) => {
     // console.log(`\nkey = ${key[1][0]}`);
-    console.log(`value = ${JSON.stringify(key[1][1])}`);
-    console.log(`type = ${typeof key[1][1]}`);
+    // console.log(`value = ${JSON.stringify(key[1][1])}`);
+    // console.log(`type = ${typeof key[1][1]}`);
     // console.log(`dummy value = ${dummyValue}`);
     jsonList.push(key[1][1] as PlayerType);
   });

@@ -37,12 +37,12 @@ io.on("connection", (socket) => {
   console.log(`User connection: ${socket.id}`);
 
   socket.on("player_movement", (data) => {
-    log("player_movement instance", grid.get(data.id));
+    // log("player_movement instance", grid.get(data.id));
     // log("data.id", data.id);
     // log("data.direction", data.direction);
     try {
       grid.get(data.id).direction = data.direction;
-      console.log(`New direction`, grid.get(data.id).direction);
+      // console.log(`New direction`, grid.get(data.id).direction);
     } catch(err) {
       console.err(`fail to set the direction of player: ${socket.id}; err: ${err}; grid: ${grid}`);
     }
@@ -58,20 +58,21 @@ io.on("connection", (socket) => {
     socket.emit("set_player_id", {playerID: socket.id});
   });
 
-  log("run()");
+  // log("run()");
 
   run(socket);
 });
 
 const updateGrid = () => {
-  console.log(`\nupdateGrid()`);
-  console.log(`grid = ${JSON.stringify(Object.fromEntries(grid))}`);
+  // console.log(`\nupdateGrid()`);
+  // console.log(`grid = ${JSON.stringify(Object.fromEntries(grid))}`);
   // Update grid
   Object.entries(Object.fromEntries(grid)).forEach(
     ([key, instance]) => {
-      console.log(`key, instance = ${key}, ${JSON.stringify(instance)}`);
-      console.log(`direction = ${instance.direction}`)
-      console.log("=====");
+      // console.log(`key, instance = ${key}, ${JSON.stringify(instance)}`);
+      // console.log(`direction = ${instance.direction}`)
+      // console.log("=====");
+      
       // Update coordinates
       switch(instance.direction) {
         case "UP":
@@ -106,7 +107,7 @@ const run = (socket) => {
     // log("grid in server", Object.keys(grid));
     // logMap(grid);
     // socket.emit("update_coordinates", count);
-    console.log(`run().grid in JSON: ${JSON.stringify(Object.fromEntries(grid))}`);
+    // console.log(`run().grid in JSON: ${JSON.stringify(Object.fromEntries(grid))}`);
     socket.emit("update_coordinates", JSON.stringify(Object.fromEntries(grid)));    // Note that emit can only transmit integer, string etc. but not map, object, function etc. 
   }, INTERVAL);
 };

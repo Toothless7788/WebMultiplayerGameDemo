@@ -37,3 +37,13 @@ export const useKeyPress = (handler: any, dependencies = []) => {
         };
     }, dependencies);
 };
+
+// export const useKeyUp = (handler: any, dependencies = []) => {
+//     useEffect(() => {
+//         document.addEventListener("keyup", handler);
+//         // clean up
+//         return () => {
+//             document.removeEventListener("keyup", handler);
+//         };
+//     }, dependencies);
+// };

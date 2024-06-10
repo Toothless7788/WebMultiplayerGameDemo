@@ -58,6 +58,43 @@ export default function App() {
     }
   };
 
+  // const releaseKey = (keyCode: string) => {
+  //   log("old pressedKey", pressedKey);
+
+  //   // Send data to server
+  //   switch(keyCode) {
+  //     case "ArrowUp":
+  //       if(pressedKey === "ArrowUp") {
+  //         setKey("NONE");
+  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
+  //         break;
+  //       }
+  //     case "ArrowDown":
+  //       if(pressedKey === "ArrowDown") {
+  //         setKey("NONE");
+  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
+  //         break;
+  //       }
+  //     case "ArrowLeft":
+  //       if(pressedKey === "ArrowLeft") {
+  //         setKey("NONE");
+  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
+  //         break;
+  //       }
+  //     case "ArrowRight":
+  //       if(pressedKey === "ArrowRight") {
+  //         setKey("NONE");
+  //         socket.emit("player_movement", {id: playerNum, direction: "NONE"});
+  //         break;
+  //       }
+  //     default:
+  //       console.log(`Undefined keyCode = ${keyCode}`);
+  //       break;
+  //   }
+
+  //   log("new pressedKey", pressedKey);
+  // };
+
   const createPlayer = () => {
     // console.log(`createPlayer()`);
     socket.emit("create_player", {x: 100, y: 100, width: 50, height: 50, color: "red", direction: "NONE", id: -1});
@@ -85,15 +122,16 @@ export default function App() {
   // Demo
   // useKeyPress((e: KeyboardEvent) => {console.log(`event e = ${e.code}`);setKey(e.code)}, []);    // Ignore the red line. VS code is tripping
   useKeyPress((e: KeyboardEvent) => {pressKey(e.code)}, []);    // Ignore the red line. VS code is tripping
+  // useKeyUp((e: KeyboardEvent) => {releaseKey(e.code)}, []);
 
   // Register this user
   useEffect(() => {    // useEffect() is invoked twice because we are using strict mode in REACT, which renders elements twice
     createPlayer();
   }, []);
 
-  useEffect(() => {    // For checking
-    log("useEffect().grid.length", grid.length);
-  }, [grid]);
+  // useEffect(() => {    // For checking
+  //   log("useEffect().grid.length", grid.length);
+  // }, [grid]);
 
 
   return (
@@ -103,7 +141,7 @@ export default function App() {
       <p>Key pressed: {pressedKey}</p>
       <p>Player ID: {playerID}</p>
       {grid.map((instance, value) => {
-        console.log(`instance in rendering = ${instance as PlayerType}`);
+        // console.log(`instance in rendering = ${instance as PlayerType}`);
         return (
           <div>
             <p>{JSON.stringify(instance)}</p>

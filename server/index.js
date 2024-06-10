@@ -20,7 +20,7 @@ function log(name, value) {
 }
 
 const INTERVAL = 1000;    // THe time interval in milliseconds for the server to send a data to clients
-const SPEED = 5;    // Speed of players
+const SPEED = 1;    // Speed of players
 let count = 1;
 let grid = new Map();
 
@@ -89,6 +89,8 @@ const updateGrid = () => {
         default:
           break;
       }
+
+      instance.direction = "NONE";    // Prevent the player from continuous motion
     }
   );
 };
